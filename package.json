@@ -1,0 +1,21 @@
+{
+  "name": "dat-test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Advait Kalakkad",
+  "license": "ISC",
+  "dependencies": {
+    "@hyperswarm/replicator": "^1.8.0",
+    "dat": "^14.0.2",
+    "hyperdrive": "^10.18.0",
+    "hyperdrive-import-files": "^4.0.0",
+    "hyperswarm": "^2.15.2",
+    "mirror-folder": "^3.1.0",
+    "mkdirp": "^1.0.4",
+    "pump": "^3.0.0"
+  }
+}
