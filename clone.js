@@ -17,7 +17,7 @@ mkdirp.sync(dir); //Create folder
 
 
 // Create hyperdrive instance. This will create a folder where all hypderdrive metadata is stored
-let archive = hyperdrive('storage_clone/', '31034e1b38df925a98b7d066368168a2eaaa22b2f46c418fe80de4b01747cc02'); // Replace ... with the Hyperdrive key logged from main hyperdrive
+let archive = hyperdrive('storage_clone/', '***'); // Replace ... with the Hyperdrive key logged from main hyperdrive
 
 // Replicate the hyperdrive and connect to peers on network
 // Here we'll use just Hyperswarm

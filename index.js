@@ -13,7 +13,7 @@ const pump = require('pump');
 
 // Create directory path from cwd
 
-let dir = path.join(process.cwd(), 'website/'); // Replace ... with the name of the folder you want to import files from
+let dir = path.join(process.cwd(), '***'); // Replace ... with the name of the folder you want to import files from
 mkdirp.sync(dir); //Create folder
 
 // Create hyperdrive instance. This will create a folder where all hypderdrive metadata is stored
