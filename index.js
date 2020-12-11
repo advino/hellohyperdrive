@@ -1,30 +1,29 @@
 // Importing modules
 // Hyperdrive for storing files
-// Hyperswarm and replicator for connecting to peers on the network
+// Hyperswarm for connecting to peers on the network
 // Mirror Folder for importing files from folder into Hyperdrive
 // Path and Mkdirp for creating the directory path
 
 let hyperdrive = require('hyperdrive');
 let hyperswarm = require('hyperswarm');
-let replicate = require('@hyperswarm/replicator');
 let mirror = require('mirror-folder');
 let path = require('path');
 const mkdirp = require('mkdirp');
+const pump = require('pump');
 
 // Create directory path from cwd
 
-let dir = path.join(process.cwd(), '***'); // Replace ... with the name of the folder you want to import files from
+let dir = path.join(process.cwd(), 'website/'); // Replace ... with the name of the folder you want to import files from
 mkdirp.sync(dir); //Create folder
 
 // Create hyperdrive instance. This will create a folder where all hypderdrive metadata is stored
 let archive = hyperdrive('storage/');
 
+// Create the Hyperswarm instance
+let swarm = hyperswarm();
+
 // When all metadata is set drive will be ready
 archive.ready(async () => {
-
-    // Replicate the hyperdrive and connect to peers on network
-    // @hyperswarm/replicator is a simpler way to connect to peers on the network using Hyperswarm
-    let swarm = replicate(archive);
 
     // Options for mirroring folders, in this case watching the mirrored folder for changes
     let mirror_options = {
@@ -34,6 +33,15 @@ archive.ready(async () => {
     // Update the archive when the drive is ready
     updateArchive(archive, dir, mirror_options);
 
+    // Replicate the hyperdrive and connect to peers on network
+    // In this instance we'll use Hyperswarm only 
+    swarm.join(archive.discoveryKey, {lookup: true, announce: true});
+    swarm.on('connection', (socket, details) => {
+
+        updateArchive(archive, dir, mirror_options);
+        pump(socket, archive.replicate(false), socket);
+    });
+
     // Listen for changes to the hyperdrive metadata
     archive.on('update', err => {
         if(err) throw err;
@@ -42,6 +50,7 @@ archive.ready(async () => {
         updateArchive(archive, dir, mirror_options);
         console.log('Archive updated');
     });
+
 
     // Log the key, copy this key into the clone file when instantiating a new Hyperdrive
     console.log('Seeding archive at', archive.key.toString('hex'));
